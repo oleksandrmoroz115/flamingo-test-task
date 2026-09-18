@@ -127,6 +127,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
+                    <useFile>false</useFile>
                     <testFailureIgnore>false</testFailureIgnore>
                     <forkCount>1</forkCount>
                     <reuseForks>true</reuseForks>
@@ -136,6 +137,8 @@
                     </argLine>
                     <systemPropertyVariables>
                         <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+                        <ui.headless>${headless}</ui.headless>
+                        <ui.browser>${ui.browser}</ui.browser>
                     </systemPropertyVariables>
                 </configuration>
                 <dependencies>
