@@ -1,0 +1,32 @@
+<div>POST to https://eu-central-1-shared-euc1-02.cdn.hygraph.com/content/clv6lwqu7000001w690st4vix/master</div>
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+{
+    &quot;query&quot;: &quot;query GetProducts($first: Int!) { products(first: $first) { id name } }&quot;,
+    &quot;variables&quot;: {
+        &quot;first&quot;: 2
+    },
+    &quot;operationName&quot;: &quot;GetProducts&quot;
+}    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>Accept: application/json</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+
+
+<h4>Curl</h4>
+<div>
+curl -v -X POST &#39;https://eu-central-1-shared-euc1-02.cdn.hygraph.com/content/clv6lwqu7000001w690st4vix/master&#39; -H &#39;Accept: application/json&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;query&quot;: &quot;query GetProducts($first: Int!) { products(first: $first) { id name } }&quot;,
+    &quot;variables&quot;: {
+        &quot;first&quot;: 2
+    },
+    &quot;operationName&quot;: &quot;GetProducts&quot;
+}&#39;
+</div>
