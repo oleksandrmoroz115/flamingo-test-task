@@ -139,3 +139,27 @@ public class RestfulBookerTests {
     }
 }
 ```
+
+---
+
+## Test Strategy
+
+The primary goal was to design an automated test suite that balances execution speed, reliability, and maintenance cost by applying a layered testing pyramid approach:
+
+* **API Testing Layer (Fast Feedback & Contract Integrity):**
+  * **RESTful Booker:** Prioritized core business CRUD workflows (creating, fetching, updating, and deleting bookings). Authentication management was centralized using retry handling and Jackson deserialization tolerance (`@JsonIgnoreProperties`) to prevent flaky runs caused by public sandbox instabilities.
+  * **GraphQL Layer (Hygraph):** Focused on schema validation, nested field queries, and structured payloads to verify backend data integrity without UI overhead.
+* **UI Testing Layer (Critical User Journey Verification):**
+  * Built on top of **Playwright Java** using the **Page Object Model (POM)** and **Component Object Pattern** (e.g., dedicated table abstractions for `WebTables` and structured wrappers for `PracticeForm`).
+  * Explicitly prioritized stability over arbitrary sleeps by utilizing Playwright's native auto-waiting mechanisms and strict locator strategies (`getByRole`, `getByPlaceholder`, stable CSS selectors).
+* **Configuration & Environment Agnosticism:**
+  * Adopted the **Owner** library for multi-tiered property resolution (`system:env` -> `system:properties` -> `local-config.properties` -> `config.properties`). This guarantees zero hardcoded credentials and seamless portability between local development machines and headless Linux runners in GitHub Actions.
+
+---
+
+## What I Would Add With More Time
+
+* **Test Parallelization & Sharding:** Configure multi-threaded test execution via `maven-surefire-plugin` and Playwright browser context pools to reduce overall pipeline execution time.
+* **Enhanced Failure Artifacts in Allure:** Integrate automatic Playwright Trace Viewer archiving (`trace.zip`), full-page screenshots, and browser network logs attached directly to Allure test cases upon failure.
+* **Mocking & Virtualization Layer:** Implement WireMock / MockWebServer integration tests to decouple pipeline verification from volatile third-party external services (e.g., Heroku cold starts).
+* **Containerization & Linting:** Introduce a dedicated `Dockerfile` for standardized multi-OS runs and add static code analysis tools (Checkstyle / SpotBugs) directly into the CI pipeline.
