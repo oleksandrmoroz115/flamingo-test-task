@@ -32,6 +32,9 @@ jobs:
         run: mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install --with-deps chromium"
 
       - name: Run Tests
+        env:
+          BOOKER_USERNAME: ${{ secrets.BOOKER_USERNAME || 'admin' }}
+          BOOKER_PASSWORD: ${{ secrets.BOOKER_PASSWORD || 'password123' }}
         run: mvn test -Dheadless=true
 
       - name: Upload Allure Results

@@ -36,9 +36,11 @@ public interface TestConfig extends Config {
     double timeout();
 
     @Key("BOOKER_USERNAME")
+    @DefaultValue("admin")
     String bookerUsername();
 
     @Key("BOOKER_PASSWORD")
+    @DefaultValue("password123")
     String bookerPassword();
 
     @Key("TEST_USER_EMAIL")
