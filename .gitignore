@@ -1,0 +1,22 @@
+# Maven
+/target/
+
+# Allure
+allure-results/
+allure-report/
+
+# Playwright
+test-results/
+playwright-report/
+
+# Local Configuration
+**/local-config.properties
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Logs
+*.log

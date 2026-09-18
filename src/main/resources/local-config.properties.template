@@ -1,0 +1,13 @@
+# Flamingo QA Framework - Local Configuration Template
+# Copy this file to local-config.properties and fill in the values.
+# DO NOT commit local-config.properties to source control.
+
+ui.browser=chromium
+ui.headless=true
+
+# API Credentials (Required)
+BOOKER_USERNAME=
+BOOKER_PASSWORD=
+
+# Test Data (Required)
+TEST_USER_EMAIL=
