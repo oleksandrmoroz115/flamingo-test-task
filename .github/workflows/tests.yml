@@ -12,32 +12,34 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Clean and Compile Dependencies
+        run: mvn clean compile test-compile -DskipTests
+
       - name: Install Playwright and Dependencies
         run: mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install --with-deps chromium"
 
-      - name: Run API Tests
-        run: mvn test -Dgroups="api"
-
-      - name: Run UI Tests
-        run: mvn test -Dgroups="ui"
+      - name: Run Tests
+        run: mvn test -Dheadless=true
 
       - name: Upload Allure Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
-          path: target/allure-results
+          path: |
+            target/allure-results
+            allure-results
           retention-days: 14
