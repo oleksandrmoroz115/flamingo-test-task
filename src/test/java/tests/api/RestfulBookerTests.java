@@ -24,7 +24,7 @@ public class RestfulBookerTests {
     private String getAuthToken(BookerClient client) {
         String username = Configuration.get().bookerUsername();
         String password = Configuration.get().bookerPassword();
-        return client.authenticate(username, password);
+        return client.getAuthToken(username, password);
     }
 
     @Test

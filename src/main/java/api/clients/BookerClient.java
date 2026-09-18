@@ -12,14 +12,14 @@ import static io.restassured.RestAssured.given;
 
 public class BookerClient {
 
-    @Step("Authenticate user: {username}")
-    public String authenticate(String username, String password) {
+    @Step("Get Auth Token for user: {username}")
+    public String getAuthToken(String username, String password) {
         AuthRequest authRequest = AuthRequest.builder()
                 .username(username)
                 .password(password)
                 .build();
 
-        Response response = given()
+        Response responseRaw = given()
                 .spec(SpecFactory.getBookerRequestSpec())
                 .body(authRequest)
                 .when()
@@ -28,7 +28,33 @@ public class BookerClient {
                 .statusCode(200)
                 .extract().response();
 
-        return response.as(AuthResponse.class).getToken();
+        AuthResponse response = responseRaw.as(AuthResponse.class);
+        
+        if (response == null || response.getToken() == null) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            
+            responseRaw = given()
+                    .spec(SpecFactory.getBookerRequestSpec())
+                    .body(authRequest)
+                    .when()
+                    .post("/auth")
+                    .then()
+                    .statusCode(200)
+                    .extract().response();
+            
+            response = responseRaw.as(AuthResponse.class);
+            
+            if (response == null || response.getToken() == null) {
+                String reason = response != null ? response.getReason() : "Unknown";
+                throw new IllegalStateException("Failed to retrieve auth token. Reason: " + reason);
+            }
+        }
+
+        return response.getToken();
     }
 
     @Step("Create a new booking")
