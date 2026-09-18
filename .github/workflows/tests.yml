@@ -13,6 +13,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -37,12 +39,20 @@ jobs:
           BOOKER_PASSWORD: ${{ secrets.BOOKER_PASSWORD || 'password123' }}
         run: mvn test -Dheadless=true
 
-      - name: Upload Allure Results
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@v1.9
         if: always()
-        uses: actions/upload-artifact@v4
+        id: allure-report
         with:
-          name: allure-results
-          path: |
-            target/allure-results
-            allure-results
-          retention-days: 14
+          allure_results: target/allure-results
+          gh_pages: gh-pages
+          allure_report: allure-report
+          allure_history: allure-history
+
+      - name: Deploy Allure Report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
